@@ -14,10 +14,9 @@ const mongoose = require('mongoose');
 const ObjectID = require('mongodb').ObjectID;
 // const ObjectId = mongoose.Types.ObjectId;
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 4000;
 
 
-// --------------------------
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,11 +29,11 @@ app.use(function (req, res, next) {
   next();
 });
 
-var url = 'mongodb://admin:!Hackerbandits@ds231360.mlab.com:31360/job_placement';
+var url = 'mongodb://127.0.0.1:27017/job_placement';
 
 mongoose.connect(url, function (err) {
   if (err) throw err;
-  console.log('mLab is now connected to MongoDB');
+  console.log('now connected to MongoDB');
 });
 
 const Recruiter = mongoose.model('Recruiter', RecruiterSchema);
