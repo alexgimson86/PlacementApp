@@ -10,7 +10,7 @@ class PersonalInfo extends Component {
             lastName: '',
             phone: '',
             email: '',
-            state: '',
+            state: 'TX',
             address: '',
             zip: '',
             city:'',
@@ -113,7 +113,7 @@ class PersonalInfo extends Component {
                 <option value="SC">South Carolina</option>
                 <option value="SD">South Dakota</option>
                 <option value="TN">Tennessee</option>
-                <option value="TX">Texas</option>
+                <option selected value="TX">Texas</option>
                 <option value="UT">Utah</option>
                 <option value="VT">Vermont</option>
                 <option value="VA">Virginia</option>
