@@ -14,7 +14,7 @@ const mongoose = require('mongoose');
 const ObjectID = require('mongodb').ObjectID;
 // const ObjectId = mongoose.Types.ObjectId;
 
-const port = process.env.PORT || 4000;
+const port = 4000;
 
 
 
@@ -31,7 +31,7 @@ app.use(function (req, res, next) {
 
 var url = 'mongodb://127.0.0.1:27017/job_placement';
 
-mongoose.connect(url, function (err) {
+mongoose.connect(url, { useNewUrlParser: true }, function (err) {
   if (err) throw err;
   console.log('now connected to MongoDB');
 });

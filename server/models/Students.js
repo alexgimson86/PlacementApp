@@ -7,7 +7,7 @@ var StudentSchema = new Schema(
     title: {
       // Full name * every collection will have an according title entry for versatile listing functionality
       type: String,
-      required: true,
+      //required: true,
       trim: true
     },
     firstName: {

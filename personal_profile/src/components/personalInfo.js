@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/personalForm.css'
-import { axios } from 'axios';
+import axios  from 'axios';
 class PersonalInfo extends Component {
     constructor(props) {
         super(props);
@@ -13,7 +13,8 @@ class PersonalInfo extends Component {
             state: '',
             address: '',
             zip: '',
-            personalWebsite: ''
+            personalWebsite: '',
+            studentId:'',
 
         }
     }
@@ -21,26 +22,28 @@ class PersonalInfo extends Component {
         if (event.target.id === 'fName')
             this.setState({ firstName: event.target.value });
 
-        if (event.target.id === 'lName')
+        else if (event.target.id === 'lName')
             this.setState({ lastName: event.target.value });
 
-        if (event.target.id === 'email')
+        else if (event.target.id === 'email')
             this.setState({ email: event.target.value });
 
-        if (event.target.id === 'phone')
+        else if (event.target.id === 'phone')
             this.setState({ phone: event.target.value });
 
-        if (event.target.id === 'address')
+        else if (event.target.id === 'address')
             this.setState({ address: event.target.value });
 
-        if (event.target.id === 'zip')
+        else if (event.target.id === 'zip')
             this.setState({ zip: event.target.value });
-            
-        if (event.target.id === 'personalWebsite')
+
+        else if (event.target.id === 'personalWebsite')
             this.setState({ personalWebsite: event.target.value });
+        else 
+            this.setState({state:event.target.value })
     }
     handleSubmit = (event) => {
-        axios.post('http://localhost/4000/personalInfo', 
+        axios.post('http://localhost:4000/student/signup', 
         {
             firstName : this.state.firstName,
             lastName  :this.state.lastName,
@@ -105,7 +108,7 @@ class PersonalInfo extends Component {
                 <option value="SC">South Carolina</option>
                 <option value="SD">South Dakota</option>
                 <option value="TN">Tennessee</option>
-                <option selected value="TX">Texas</option>
+                <option value="TX">Texas</option>
                 <option value="UT">Utah</option>
                 <option value="VT">Vermont</option>
                 <option value="VA">Virginia</option>
@@ -152,7 +155,7 @@ class PersonalInfo extends Component {
                     </div>
                     <div className="form-group">
                         <label htmlFor="Personal Website">Personal Website</label>
-                        <input type="text" onChange={this.handleChange} value={this.state.zip} className="form-control" id="personalWebsite" placeholder="github or personal website URL" />
+                        <input type="text" onChange={this.handleChange} value={this.state.personalWebsite} className="form-control" id="personalWebsite" placeholder="github or personal website URL" />
                     </div>
                     <div className="form-group">
                         {this.stateDropdown()}
