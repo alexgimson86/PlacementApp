@@ -8,13 +8,15 @@ class PersonalInfo extends Component {
         this.state = {
             firstName: '',
             lastName: '',
-            phoneNumber: '',
+            phone: '',
             email: '',
             state: '',
             address: '',
             zip: '',
+            city:'',
             personalWebsite: '',
             studentId:'',
+            country: 'US'
 
         }
     }
@@ -39,21 +41,24 @@ class PersonalInfo extends Component {
 
         else if (event.target.id === 'personalWebsite')
             this.setState({ personalWebsite: event.target.value });
+
+        else if (event.target.id === 'city')
+            this.setState({city: event.target.value})
         else 
-            this.setState({state:event.target.value })
+            this.setState({state: event.target.value })
     }
     handleSubmit = (event) => {
         axios.post('http://localhost:4000/student/signup', 
         {
             firstName : this.state.firstName,
             lastName  :this.state.lastName,
-            phoneNumber: this.state.phoneNumber,
-            email: this.state.email,
-            state: this.state.state,
-            address: this.state.address,
-            zipCode: this.state.zipCode,
-            mailingAddress: this.state.mailingAddress,
-            personalWebsite: this.state.personalWebsite
+            phone: this.state.phone,
+             email: this.state.email,
+            'address.state' : this.state.state,
+            'address.street' : this.state.address,
+            'address.zip'   : this.state.zip,
+            'address.country': this.state.country,
+             personalWebsite : this.state.personalWebsite
         })
             .then(response => {
                 console.log("in then")
@@ -146,19 +151,23 @@ class PersonalInfo extends Component {
                         <input type="text" onChange={this.handleChange} value={this.state.phone} className="form-control" id="phone" aria-describedby="phone number" placeholder="Enter Phone Number" />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="Address">Address</label>
+                        <label htmlFor="Address">Street Address</label>
                         <input type="text" onChange={this.handleChange} value={this.state.address} className="form-control" id="address" placeholder="Enter Street Address" />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="Address">City</label>
+                        <input type="text" onChange={this.handleChange} value={this.state.city} className="form-control" id="city" placeholder="Enter Street Address" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="Enter Zip Code ">Zip Code</label>
                         <input type="text" onChange={this.handleChange} value={this.state.zip} className="form-control" id="zip" placeholder="Enter Zip Code" />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="Personal Website">Personal Website</label>
-                        <input type="text" onChange={this.handleChange} value={this.state.personalWebsite} className="form-control" id="personalWebsite" placeholder="github or personal website URL" />
+                        {this.stateDropdown()}
                     </div>
                     <div className="form-group">
-                        {this.stateDropdown()}
+                        <label htmlFor="Personal Website">Personal Website</label>
+                        <input type="text" onChange={this.handleChange} value={this.state.personalWebsite} className="form-control" id="personalWebsite" placeholder="github or personal website URL" />
                     </div>
                     <button type="submit" value="Submit" className="btn btn-primary">Submit</button>
                 </form>
