@@ -84,16 +84,17 @@ app.get('/student/:student_id', (req, res) => {
 // be sure to set values in Postman if testing with Postman under the Body tab below the url path bar
 
 app.put('/student/:student_id', (req, res) => {
-  Student.findById(req.params.student_id, (err, student) => {
+
+  Student.findById( ObjectID(req.params.student_id)/*req.params.student_id*/, (err, student) => {
 
     // updating student info
-    student.firstName = req.body.firstName;
-    student.lastName = req.body.lastName;
-    student.email = req.body.email;
-    student.password = req.body.password;
-    student.savedJobs = req.body.savedJobs;
-    student.fieldOfStudy = req.body.fieldOfStudy;
-    student.skills = req.body.skills;
+    if(req.body.firstName) student.firstName = req.body.firstName;
+    if(req.body.lastName) student.lastName = req.body.lastName;
+    if(req.body.email) student.email = req.body.email;
+    if(req.body.password) student.password = req.body.password;
+    if(req.body.savedJobs) student.savedJobs = req.body.savedJobs;
+    if(req.body.fieldOfStudy) student.fieldOfStudy = req.body.fieldOfStudy;
+    if(req.body.skills) student.skills = req.body.skills;
 
     // save info
     student.save((err) => {

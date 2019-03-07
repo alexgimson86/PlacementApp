@@ -48,7 +48,7 @@ class PersonalInfo extends Component {
             this.setState({state: event.target.value })
     }
     handleSubmit = (event) => {
-        axios.post('http://localhost:4000/student/signup', 
+        axios.put('http://localhost:4000/student/5c805561a753690941b9711a', 
         {
             firstName : this.state.firstName,
             lastName  :this.state.lastName,
@@ -135,28 +135,27 @@ class PersonalInfo extends Component {
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="nameInput">First Name</label>
-                        <input type="text" onChange={this.handleChange} value={this.state.firstName} className="form-control" id="fName" aria-describedby="FirstName" placeholder="Enter First Name" />
+                        <input required type="text" onChange={this.handleChange} value={this.state.firstName} className="form-control" id="fName" aria-describedby="FirstName" placeholder="Enter First Name" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="lastName">Last Name</label>
-                        <input type="text" onChange={this.handleChange} value={this.state.lastName} className="form-control" id="lName" placeholder="Enter Last Name" />
+                        <input required type="text" onChange={this.handleChange} value={this.state.lastName} className="form-control" id="lName" placeholder="Enter Last Name" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="email">Email Address</label>
-                        <input type="email" onChange={this.handleChange} value={this.state.email} className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter Email" />
-                        <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
+                        <input required type="email" onChange={this.handleChange} value={this.state.email} className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter Email" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="phone">Phone Number</label>
-                        <input type="text" onChange={this.handleChange} value={this.state.phone} className="form-control" id="phone" aria-describedby="phone number" placeholder="Enter Phone Number" />
+                        <input required type="text" onChange={this.handleChange} value={this.state.phone} className="form-control" id="phone" aria-describedby="phone number" placeholder="Enter Phone Number" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="Address">Street Address</label>
-                        <input type="text" onChange={this.handleChange} value={this.state.address} className="form-control" id="address" placeholder="Enter Street Address" />
+                        <input required type="text" onChange={this.handleChange} value={this.state.address} className="form-control" id="address" placeholder="Enter Street Address" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="Address">City</label>
-                        <input type="text" onChange={this.handleChange} value={this.state.city} className="form-control" id="city" placeholder="Enter Street Address" />
+                        <input required type="text" onChange={this.handleChange} value={this.state.city} className="form-control" id="city" placeholder="Enter Street Address" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="Enter Zip Code ">Zip Code</label>
@@ -167,7 +166,7 @@ class PersonalInfo extends Component {
                     </div>
                     <div className="form-group">
                         <label htmlFor="Personal Website">Personal Website</label>
-                        <input type="text" onChange={this.handleChange} value={this.state.personalWebsite} className="form-control" id="personalWebsite" placeholder="github or personal website URL" />
+                        <input required type="text" onChange={this.handleChange} value={this.state.personalWebsite} className="form-control" id="personalWebsite" placeholder="github or personal website URL" />
                     </div>
                     <button type="submit" value="Submit" className="btn btn-primary">Submit</button>
                 </form>
