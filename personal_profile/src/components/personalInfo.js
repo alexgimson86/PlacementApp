@@ -53,12 +53,12 @@ class PersonalInfo extends Component {
             firstName : this.state.firstName,
             lastName  :this.state.lastName,
             phone: this.state.phone,
-             email: this.state.email,
-            'address.state' : this.state.state,
-            'address.street' : this.state.address,
-            'address.zip'   : this.state.zip,
-            'address.country': this.state.country,
-             personalWebsite : this.state.personalWebsite
+            email: this.state.email,
+            state : this.state.state,
+            street : this.state.address,
+            zip   : this.state.zip,
+            country: this.state.country,
+            personalWebsite : this.state.personalWebsite
         })
             .then(response => {
                 console.log("in then")

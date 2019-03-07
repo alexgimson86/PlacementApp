@@ -95,6 +95,10 @@ app.put('/student/:student_id', (req, res) => {
     if(req.body.savedJobs) student.savedJobs = req.body.savedJobs;
     if(req.body.fieldOfStudy) student.fieldOfStudy = req.body.fieldOfStudy;
     if(req.body.skills) student.skills = req.body.skills;
+    if(req.body.phone) student.phone = req.body.phone;
+    if(req.body.street) student.address.street = req.body.street;
+    if(req.body.zip) student.address.zip = req.body.zip
+    if(req.body.state) student.address.state = req.body.state
 
     // save info
     student.save((err) => {
