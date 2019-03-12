@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/personalForm.css'
-import axios  from 'axios';
+import axios from 'axios';
+import Resume from './resumeUpload';
+
 class PersonalInfo extends Component {
     constructor(props) {
         super(props);
@@ -13,10 +15,12 @@ class PersonalInfo extends Component {
             state: 'TX',
             address: '',
             zip: '',
-            city:'',
+            city: '',
             personalWebsite: '',
-            studentId:'',
-            country: 'US'
+            studentId: '5c805561a753690941b9711a',
+            country: 'US',
+            //resume:''
+
 
         }
     }
@@ -43,25 +47,27 @@ class PersonalInfo extends Component {
             this.setState({ personalWebsite: event.target.value });
 
         else if (event.target.id === 'city')
-            this.setState({city: event.target.value})
-        else 
-            this.setState({state: event.target.value })
+            this.setState({ city: event.target.value })
+        /* else if(event.target.type === 'file')
+             this.setState({resume: event.target.value})*/
+        else
+            this.setState({ state: event.target.value })
     }
     handleSubmit = (event) => {
-        axios.put('http://localhost:4000/student/5c805561a753690941b9711a', 
-        {
-            firstName : this.state.firstName,
-            lastName  :this.state.lastName,
-            phone: this.state.phone,
-            email: this.state.email,
-            state : this.state.state,
-            street : this.state.address,
-            zip   : this.state.zip,
-            country: this.state.country,
-            personalWebsite : this.state.personalWebsite
-        })
+        axios.put('http://localhost:4000/student/'+this.state.studentId,
+            {
+                firstName: this.state.firstName,
+                lastName: this.state.lastName,
+                phone: this.state.phone,
+                email: this.state.email,
+                state: this.state.state,
+                street: this.state.address,
+                zip: this.state.zip,
+                country: this.state.country,
+                personalWebsite: this.state.personalWebsite,
+                //resume: this.state.resume,
+            })
             .then(response => {
-                console.log("in then")
             })
             .catch(err => {
                 console.log(err)
@@ -168,8 +174,12 @@ class PersonalInfo extends Component {
                         <label htmlFor="Personal Website">Personal Website</label>
                         <input required type="text" onChange={this.handleChange} value={this.state.personalWebsite} className="form-control" id="personalWebsite" placeholder="github or personal website URL" />
                     </div>
+
                     <button type="submit" value="Submit" className="btn btn-primary">Submit</button>
                 </form>
+                <br/>
+                <br/>
+                    <Resume studentId={this.state.studentId} />
             </div>
         );
     }

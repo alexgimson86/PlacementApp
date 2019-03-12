@@ -1,7 +1,35 @@
 const read = require('fs');
 const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
+//const formidable = require('formidable');
+//const formidableMiddleware = require('express-formidable');
+var multer = require('multer');
+const uuidv4 = require('uuid/v4');
+const path = require('path');
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    /*
+      Files will be saved in the 'uploads' directory. Make
+      sure this directory already exists!
+    */
+    cb(null, './uploads');
+  },
+  filename: (req, file, cb) => {
+    /*
+      uuidv4() will generate a random ID that we'll use for the
+      new filename. We use path.extname() to get
+      the extension from the original file name and add that to the new
+      generated ID. These combined will create the file name used
+      to save the file on the server and will be available as
+      req.file.pathname in the router handler.
+    */
+    const newFilename = `${uuidv4()}${path.extname(file.originalname)}`;
+    cb(null, newFilename);
+  },
+});
+// create the multer instance that will be used to upload/save the file
+const upload = multer({ storage });
+const app = express();
 
 const RecruiterSchema = require('./models/Recruiters');
 const JobSchema = require('./models/Jobs');
@@ -12,12 +40,10 @@ const ResumeSchema = require('./models/Resumes');
 const mongoose = require('mongoose');
 
 const ObjectID = require('mongodb').ObjectID;
-// const ObjectId = mongoose.Types.ObjectId;
+//const ObjectId = mongoose.Types.ObjectId;
 
 const port = 4000;
-
-
-
+app.use(express.static(__dirname + '/uploads'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -85,20 +111,21 @@ app.get('/student/:student_id', (req, res) => {
 
 app.put('/student/:student_id', (req, res) => {
 
-  Student.findById( ObjectID(req.params.student_id)/*req.params.student_id*/, (err, student) => {
+
+  Student.findById(ObjectID(req.params.student_id)/*req.params.student_id*/, (err, student) => {
 
     // updating student info
-    if(req.body.firstName) student.firstName = req.body.firstName;
-    if(req.body.lastName) student.lastName = req.body.lastName;
-    if(req.body.email) student.email = req.body.email;
-    if(req.body.password) student.password = req.body.password;
-    if(req.body.savedJobs) student.savedJobs = req.body.savedJobs;
-    if(req.body.fieldOfStudy) student.fieldOfStudy = req.body.fieldOfStudy;
-    if(req.body.skills) student.skills = req.body.skills;
-    if(req.body.phone) student.phone = req.body.phone;
-    if(req.body.street) student.address.street = req.body.street;
-    if(req.body.zip) student.address.zip = req.body.zip
-    if(req.body.state) student.address.state = req.body.state
+    if (req.body.firstName) student.firstName = req.body.firstName;
+    if (req.body.lastName) student.lastName = req.body.lastName;
+    if (req.body.email) student.email = req.body.email;
+    if (req.body.password) student.password = req.body.password;
+    if (req.body.savedJobs) student.savedJobs = req.body.savedJobs;
+    if (req.body.fieldOfStudy) student.fieldOfStudy = req.body.fieldOfStudy;
+    if (req.body.skills) student.skills = req.body.skills;
+    if (req.body.phone) student.phone = req.body.phone;
+    if (req.body.street) student.address.street = req.body.street;
+    if (req.body.zip) student.address.zip = req.body.zip
+    if (req.body.state) student.address.state = req.body.state
 
     // save info
     student.save((err) => {
@@ -134,17 +161,9 @@ app.get('/resume/:resume_id', (req, res) => {
   });
 });
 
-app.post('/resume/post', (req, res) => {
-  console.log('in /resume/post, req.body sent is :\n', req.body);
-  var resume = new Resume(req.body);
-  console.log('resume created is \n', resume);
-
-  resume.save(function (err, r) {
-    if (err) {
-      res.send(err)
-    }
-    res.json(resume)
-  })
+app.post('/resume/post', upload.single('myFile'),  (req, res) => {
+  console.log(req.file);
+  res.send();
 });
 
 app.put('/resume/:resume_id', (req, res) => {
