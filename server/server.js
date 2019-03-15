@@ -1,11 +1,13 @@
 const read = require('fs');
 const express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 //const formidable = require('formidable');
 //const formidableMiddleware = require('express-formidable');
 var multer = require('multer');
 const uuidv4 = require('uuid/v4');
 const path = require('path');
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     /*
@@ -30,7 +32,12 @@ const storage = multer.diskStorage({
 // create the multer instance that will be used to upload/save the file
 const upload = multer({ storage });
 const app = express();
-
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
 const RecruiterSchema = require('./models/Recruiters');
 const JobSchema = require('./models/Jobs');
 const StudentSchema = require('./models/Students');
@@ -43,7 +50,7 @@ const ObjectID = require('mongodb').ObjectID;
 //const ObjectId = mongoose.Types.ObjectId;
 
 const port = 4000;
-app.use(express.static(__dirname + '/uploads'))
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -110,8 +117,8 @@ app.get('/student/:student_id', (req, res) => {
 // be sure to set values in Postman if testing with Postman under the Body tab below the url path bar
 
 app.put('/student/:student_id', (req, res) => {
-
-
+  //save user id for this session
+  req.session.student_id = req.params.student_id;
   Student.findById(ObjectID(req.params.student_id)/*req.params.student_id*/, (err, student) => {
 
     // updating student info
@@ -124,8 +131,9 @@ app.put('/student/:student_id', (req, res) => {
     if (req.body.skills) student.skills = req.body.skills;
     if (req.body.phone) student.phone = req.body.phone;
     if (req.body.street) student.address.street = req.body.street;
-    if (req.body.zip) student.address.zip = req.body.zip
-    if (req.body.state) student.address.state = req.body.state
+    if (req.body.zip) student.address.zip = req.body.zip;
+    if (req.body.state) student.address.state = req.body.state;
+    if (req.body.description) student.title = req.body.description;
 
     // save info
     student.save((err) => {
@@ -161,9 +169,24 @@ app.get('/resume/:resume_id', (req, res) => {
   });
 });
 
-app.post('/resume/post', upload.single('myFile'),  (req, res) => {
-  console.log(req.file);
-  res.send();
+app.post('/resume/post', upload.any(), (req, res) => {
+
+  console.log(req.files)
+  var id = '5c805561a753690941b9711a'
+  var resume = new Resume({ title: req.files[0].filename, studentId: ObjectID(id), pdfFileUrl: req.files[0].path, })
+  resume.save((function (err) {
+    if (err) return handleError(err);
+
+  }));
+  //save image url to student db
+  Student.findById(ObjectID(id), (err, student) => {
+    student.imageUrl = req.files[1].path
+    student.save((err) => {
+      if (err)
+        res.send(err);
+      res.send();
+    });
+  })
 });
 
 app.put('/resume/:resume_id', (req, res) => {

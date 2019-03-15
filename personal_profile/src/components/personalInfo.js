@@ -9,6 +9,7 @@ class PersonalInfo extends Component {
         super(props);
         this.state = {
             firstName: '',
+            description:'',
             lastName: '',
             phone: '',
             email: '',
@@ -48,8 +49,8 @@ class PersonalInfo extends Component {
 
         else if (event.target.id === 'city')
             this.setState({ city: event.target.value })
-        /* else if(event.target.type === 'file')
-             this.setState({resume: event.target.value})*/
+         else if(event.target.id === 'desc')
+             this.setState({description: event.target.value})
         else
             this.setState({ state: event.target.value })
     }
@@ -65,7 +66,7 @@ class PersonalInfo extends Component {
                 zip: this.state.zip,
                 country: this.state.country,
                 personalWebsite: this.state.personalWebsite,
-                //resume: this.state.resume,
+                description: this.state.description
             })
             .then(response => {
             })
@@ -139,6 +140,11 @@ class PersonalInfo extends Component {
                     </h2>
                 </div>
                 <form onSubmit={this.handleSubmit}>
+                <div className="form-group">
+                <label htmlFor="nameInput">Descriptive Introduction</label>
+                       <textarea id="desc" onChange={this.handleChange} value={this.state.description} className="form-control">
+                       </textarea>
+                </div>
                     <div className="form-group">
                         <label htmlFor="nameInput">First Name</label>
                         <input required type="text" onChange={this.handleChange} value={this.state.firstName} className="form-control" id="fName" aria-describedby="FirstName" placeholder="Enter First Name" />

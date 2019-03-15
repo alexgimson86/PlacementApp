@@ -62,6 +62,9 @@ var StudentSchema = new Schema(
       // required: true
       //HASH
     },
+    imageUrl: {
+      type: String,
+    },
     savedJobs: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Jobs'
