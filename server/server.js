@@ -2,11 +2,11 @@ const read = require('fs');
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const path = require('path')
 //const formidable = require('formidable');
 //const formidableMiddleware = require('express-formidable');
 var multer = require('multer');
 const uuidv4 = require('uuid/v4');
-const path = require('path');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
       Files will be saved in the 'uploads' directory. Make
       sure this directory already exists!
     */
-    cb(null, './uploads');
+   cb(null,'./server/public/uploads/');
   },
   filename: (req, file, cb) => {
     /*
@@ -30,7 +30,8 @@ const storage = multer.diskStorage({
   },
 });
 // create the multer instance that will be used to upload/save the file
-const upload = multer({ storage });
+//const upload = multer({ storage });
+const upload = multer({storage: storage })
 const app = express();
 app.use(session({
   secret: 'keyboard cat',
@@ -50,7 +51,8 @@ const ObjectID = require('mongodb').ObjectID;
 //const ObjectId = mongoose.Types.ObjectId;
 
 const port = 4000;
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, 'public/uploads')))
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -173,14 +175,14 @@ app.post('/resume/post', upload.any(), (req, res) => {
 
   console.log(req.files)
   var id = '5c805561a753690941b9711a'
-  var resume = new Resume({ title: req.files[0].filename, studentId: ObjectID(id), pdfFileUrl: req.files[0].path, })
+  var resume = new Resume({ title: req.files[0].filename, studentId: ObjectID(id), pdfFileUrl: req.files[0].filename, })
   resume.save((function (err) {
     if (err) return handleError(err);
 
   }));
   //save image url to student db
   Student.findById(ObjectID(id), (err, student) => {
-    student.imageUrl = req.files[1].path
+    student.imageUrl = req.files[1].filename
     student.save((err) => {
       if (err)
         res.send(err);
