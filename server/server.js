@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
       Files will be saved in the 'uploads' directory. Make
       sure this directory already exists!
     */
-   cb(null,'./server/public/uploads/');
+    cb(null, './server/public/uploads/');
   },
   filename: (req, file, cb) => {
     /*
@@ -31,7 +31,7 @@ const storage = multer.diskStorage({
 });
 // create the multer instance that will be used to upload/save the file
 //const upload = multer({ storage });
-const upload = multer({storage: storage })
+const upload = multer({ storage: storage })
 const app = express();
 app.use(session({
   secret: 'keyboard cat',
@@ -103,6 +103,7 @@ app.get('/student', (req, res) => {
     if (err)
       res.send(err);
     res.json(students);
+
   })
 });
 
@@ -163,24 +164,38 @@ app.get('/resume', (req, res) => {
 
 // get individual resume
 
-app.get('/resume/:resume_id', (req, res) => {
-  Student.findById(req.params.resume_id, (err, resume) => {
-    if (err)
-      res.send(err);
-    res.json(resume);
-  });
+app.get('/resume/:student_id', (req, res) => {
+  Student.findById(req.params.student_id, (error, student) => {
+    Resume.findById(student.resumes[0] , (err, resume) => {
+      if (err)
+        res.send(err);
+      res.send(resume.pdfFileUrl);
+
+    });
+  })
 });
 
 app.post('/resume/post', upload.any(), (req, res) => {
-
+  var resumeId = null;
   console.log(req.files)
-  var id = '5c805561a753690941b9711a'
+  var id = '5c994b207615a922f6b15e14'
   var resume = new Resume({ title: req.files[0].filename, studentId: ObjectID(id), pdfFileUrl: req.files[0].filename, })
   resume.save((function (err) {
     if (err) return handleError(err);
 
+    Resume.find({ pdfFileUrl: { $eq: req.files[0].filename } }, (err, resume) => {
+      if (!err) {
+        resumeId = resume[0].id;
+        Student.findById(ObjectID(id), (err, student) => {
+          student.resumes = ObjectID(resumeId)
+          student.save((err) => {
+            console.log(err)
+          })
+        })
+      }
+    })
+    //save image url to student db
   }));
-  //save image url to student db
   Student.findById(ObjectID(id), (err, student) => {
     student.imageUrl = req.files[1].filename
     student.save((err) => {

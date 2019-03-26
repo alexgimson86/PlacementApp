@@ -17,36 +17,51 @@ export default class StudentComponent extends Component {
         }
     }
     handleClick = () => {
-        this.setState( state => {
-            return {display: !state.display}
+        this.setState(state => {
+            return { display: !state.display }
         })
 
 
     }
     constructStudent = (student) => {
         let imgU = "http://localhost:4000/" + student.imageUrl;
-        let URL = `/studentModule/${student._id}`;
+        let URL = `/studentModule/${student._id}`
+        var words = null
+        var modString = '';
+        if(student.title){
+             words = student.title.split(' ');
+            if (words.length > 10) {
+                words.forEach( (element, i) => {
+                    if(i < 10)
+                        modString += element + ' '
+                });
+                modString += '...'
+            }
+            else 
+             modString = student.title
+        }
+
         return (
 
             <tr key={student._id}>
                 <td key="image"><img src={imgU} className="img-thumbnail float-left" alt="no pic"></img>
                 </td>
-                <td key="fNameLname">{student.firstName}{student.lastName}</td>
-                <td key="title">{student.title}
+                <td key="fNameLname">{student.firstName}{'  '}{student.lastName}</td>
+                <td key="title">{modString}
                 </td>
                 <td>
                     <Link to={URL} onClick={this.handleClick}>
                         click to see full report
                 </Link>
-                </td> 
-                </tr>
+                </td>
+            </tr>
         )
     }
     componentDidMount() {
-                let data = this.constructStudent(this.props.studentInfo) 
-                this.setState({
-                    studentData: data
-                })
+        let data = this.constructStudent(this.props.studentInfo)
+        this.setState({
+            studentData: data
+        })
     }
     render() {
         return (
@@ -58,7 +73,7 @@ export default class StudentComponent extends Component {
                         </tbody>
                     </Table>
                     <div>
-                        <Route exact path='/studentModule/:id' render={()=><ModalFunc studentInfo={this.props.studentInfo} display={this.state.display} handleClick={this.handleClick}/>}/>
+                        <Route exact path='/studentModule/:id' render={() => <ModalFunc studentInfo={this.props.studentInfo} display={this.state.display} handleClick={this.handleClick} />} />
                     </div>
                 </Router>
             </div>
