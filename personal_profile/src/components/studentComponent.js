@@ -65,18 +65,12 @@ export default class StudentComponent extends Component {
     }
     render() {
         return (
-            <div>
                 <Router>
-                    <Table responsive>
                         <tbody>
                             {this.state.studentData ? this.state.studentData : ""}
                         </tbody>
-                    </Table>
-                    <div>
-                        <Route exact path='/studentModule/:id' render={() => <ModalFunc studentInfo={this.props.studentInfo} display={this.state.display} handleClick={this.handleClick} />} />
-                    </div>
+                        <Route exact path='/studentModule/:id' render={() => <ModalFunc studentInfo={this.props.studentInfo} display={this.state.display} handleClick={this.handleClick} />}/>
                 </Router>
-            </div>
 
         )
     }

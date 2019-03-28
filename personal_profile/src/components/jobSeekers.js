@@ -44,7 +44,7 @@ export default class JobSeekers extends Component {
     render() {
         return (
             <div>
-                    <Table responsive>
+                    <Table  bordered hover>
                         <thead>
                             <tr>
                                 <th>Image</th>
@@ -53,8 +53,8 @@ export default class JobSeekers extends Component {
                                 <th>More Details</th>
                             </tr>
                         </thead>
-                    </Table>
                     {this.state.mappedList ? this.state.mappedList : ""}
+                    </Table>
             </div>
 
         )

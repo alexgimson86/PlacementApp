@@ -26,33 +26,7 @@ class PersonalInfo extends Component {
         }
     }
     handleChange = (event) => {
-        if (event.target.id === 'fName')
-            this.setState({ firstName: event.target.value });
-
-        else if (event.target.id === 'lName')
-            this.setState({ lastName: event.target.value });
-
-        else if (event.target.id === 'email')
-            this.setState({ email: event.target.value });
-
-        else if (event.target.id === 'phone')
-            this.setState({ phone: event.target.value });
-
-        else if (event.target.id === 'address')
-            this.setState({ address: event.target.value });
-
-        else if (event.target.id === 'zip')
-            this.setState({ zip: event.target.value });
-
-        else if (event.target.id === 'personalWebsite')
-            this.setState({ personalWebsite: event.target.value });
-
-        else if (event.target.id === 'city')
-            this.setState({ city: event.target.value })
-         else if(event.target.id === 'desc')
-             this.setState({description: event.target.value})
-        else
-            this.setState({ state: event.target.value })
+        this.setState({[event.target.name] : event.target.value });
     }
     handleSubmit = (event) => {
         axios.put('http://localhost:4000/student/'+this.state.studentId,
@@ -142,43 +116,43 @@ class PersonalInfo extends Component {
                 <form onSubmit={this.handleSubmit}>
                 <div className="form-group">
                 <label htmlFor="nameInput">Descriptive Introduction</label>
-                       <textarea id="desc" onChange={this.handleChange} value={this.state.description} className="form-control">
+                       <textarea id="desc" onChange={this.handleChange} name="description" value={this.state.description} className="form-control">
                        </textarea>
                 </div>
                     <div className="form-group">
                         <label htmlFor="nameInput">First Name</label>
-                        <input required type="text" onChange={this.handleChange} value={this.state.firstName} className="form-control" id="fName" aria-describedby="FirstName" placeholder="Enter First Name" />
+                        <input required type="text" onChange={this.handleChange} value={this.state.firstName} className="form-control" id="fName" name="firstName" placeholder="Enter First Name" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="lastName">Last Name</label>
-                        <input required type="text" onChange={this.handleChange} value={this.state.lastName} className="form-control" id="lName" placeholder="Enter Last Name" />
+                        <input required type="text" onChange={this.handleChange} value={this.state.lastName} className="form-control" name="lastName" id="lName" placeholder="Enter Last Name" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="email">Email Address</label>
-                        <input required type="email" onChange={this.handleChange} value={this.state.email} className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter Email" />
+                        <input required type="email" onChange={this.handleChange} value={this.state.email} className="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter Email" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="phone">Phone Number</label>
-                        <input required type="text" onChange={this.handleChange} value={this.state.phone} className="form-control" id="phone" aria-describedby="phone number" placeholder="Enter Phone Number" />
+                        <input required type="text" onChange={this.handleChange} value={this.state.phone} className="form-control" name="phone" id="phone" aria-describedby="phone number" placeholder="Enter Phone Number" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="Address">Street Address</label>
-                        <input required type="text" onChange={this.handleChange} value={this.state.address} className="form-control" id="address" placeholder="Enter Street Address" />
+                        <input required type="text" onChange={this.handleChange} value={this.state.address} className="form-control" name="address" id="address" placeholder="Enter Street Address" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="Address">City</label>
-                        <input required type="text" onChange={this.handleChange} value={this.state.city} className="form-control" id="city" placeholder="Enter Street Address" />
+                        <input required type="text" onChange={this.handleChange} value={this.state.city} className="form-control" name="city" id="city" placeholder="Enter Street Address" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="Enter Zip Code ">Zip Code</label>
-                        <input type="text" onChange={this.handleChange} value={this.state.zip} className="form-control" id="zip" placeholder="Enter Zip Code" />
+                        <input type="text" onChange={this.handleChange} value={this.state.zip} className="form-control" name="zip" id="zip" placeholder="Enter Zip Code" />
                     </div>
                     <div className="form-group">
                         {this.stateDropdown()}
                     </div>
                     <div className="form-group">
                         <label htmlFor="Personal Website">Personal Website</label>
-                        <input required type="text" onChange={this.handleChange} value={this.state.personalWebsite} className="form-control" id="personalWebsite" placeholder="github or personal website URL" />
+                        <input required type="text" onChange={this.handleChange} value={this.state.personalWebsite} className="form-control" name="personalWebsite" id="personalWebsite" placeholder="github or personal website URL" />
                     </div>
 
                     <button type="submit" value="Submit" className="btn btn-primary">Submit</button>

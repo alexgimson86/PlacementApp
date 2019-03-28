@@ -59,9 +59,8 @@ const ModalFunc = (props) => {
                 <br/><br/>
                 <Router>
                     <Link to={resumeLink} >
-                        <Button variant="primary">
-                            View Resume
-                            </Button>
+                        <Button variant="primary">View Resume
+                        </Button>{' '}
                     </Link>
                     <Link to="/">
                         <Button variant="secondary" onClick={props.handleClick}>

@@ -30,7 +30,7 @@ export default class Resumes extends Component {
     
     render() {
         return (
-             this.state.url ? <PDF url={this.state.url}/> : null 
+             this.state.url ? <PDF name={this.props.studentInfo.firstName} url={this.state.url}/> : null 
         ) 
     }
 }
