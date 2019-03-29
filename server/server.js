@@ -63,8 +63,8 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
 });
-
-var url = 'mongodb://127.0.0.1:27017/job_placement';
+const password = encodeURIComponent('accrocks@2019')
+var url = `mongodb://personalprofileuser:${password}@ds223542.mlab.com:23542/personalprofiledb`;
 
 mongoose.connect(url, { useNewUrlParser: true }, function (err) {
   if (err) throw err;
