@@ -3,10 +3,14 @@ const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const path = require('path')
+var cors = require('cors');
 //const formidable = require('formidable');
 //const formidableMiddleware = require('express-formidable');
+var passport = require('passport')
+  , LocalStrategy = require('passport-local').Strategy;
 var multer = require('multer');
 const uuidv4 = require('uuid/v4');
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -39,6 +43,11 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: true }
 }))
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(cors());
+
+
 const RecruiterSchema = require('./models/Recruiters');
 const JobSchema = require('./models/Jobs');
 const StudentSchema = require('./models/Students');
@@ -77,6 +86,34 @@ const Job = mongoose.model('Job', JobSchema);
 const Instructor = mongoose.model('Instructor', InstructorSchema);
 const Resume = mongoose.model('Resume', ResumeSchema);
 
+//passport js strategy for username and password login i.e. not using social media
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    Student.findOne({ username: username }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
+  }
+));
+///////////end passportjs strategy
+
+//serialize user so theres persistent session storages
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  Student.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+//end of passport serialize funcs
 // Singular, not pularlized models declared here for Referencing in other schemas
 // Be sure to import in order to work
 
@@ -136,7 +173,7 @@ app.put('/student/:student_id', (req, res) => {
     if (req.body.street) student.address.street = req.body.street;
     if (req.body.zip) student.address.zip = req.body.zip;
     if (req.body.state) student.address.state = req.body.state;
-    if (req.body.description) student.title = req.body.description;
+    if (req.body.title) student.title = req.body.title;
 
     // save info
     student.save((err) => {
@@ -178,7 +215,8 @@ app.get('/resume/:student_id', (req, res) => {
 app.post('/resume/post', upload.any(), (req, res) => {
   var resumeId = null;
   console.log(req.files)
-  var id = '5c994b207615a922f6b15e14'
+  var id = '5c9ea2db5298ca1c52e48f48'
+  
   var resume = new Resume({ title: req.files[0].filename, studentId: ObjectID(id), pdfFileUrl: req.files[0].filename, })
   resume.save((function (err) {
     if (err) return handleError(err);
@@ -553,7 +591,6 @@ app.get('/instructor/:instructor_id', (req, res) => {
 
 // below is unused so far
 
-app.get('/login', (req, res) => { });
 
 app.post('/login', (req, res) => {
   var newLogin = req.body;
@@ -572,11 +609,21 @@ app.post('/login', (req, res) => {
   });
 });
 
+app.post('/student/login/', passport.authenticate('local'),
+function(req, res) {
+  let user = {
+    firstName: req.user.firstName,
+    lastName: req.user.lastName,
+    username: req.user.username,
+  }
+  res.send(user);
+}),
 app.get('/student/login/:id', (req, res) => { });
 
 app.put('/student/login/:id', (req, res) => { });
 
 app.delete('/student/login/:id', (req, res) => { });
+
 
 
 //

@@ -10,6 +10,10 @@ var StudentSchema = new Schema(
       //required: true,
       trim: true
     },
+    username: {
+      type: String,
+      trim: true
+    },
     firstName: {
       type: String,
       // required: true,
@@ -78,6 +82,11 @@ var StudentSchema = new Schema(
       // required: true
     }
   }
+  
 );
+
+StudentSchema.methods.validPassword = function(p){
+  return p === this.password
+}
 
 module.exports = StudentSchema;

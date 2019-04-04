@@ -9,7 +9,7 @@ class PersonalInfo extends Component {
         super(props);
         this.state = {
             firstName: '',
-            description:'',
+            title:'',
             lastName: '',
             phone: '',
             email: '',
@@ -18,7 +18,7 @@ class PersonalInfo extends Component {
             zip: '',
             city: '',
             personalWebsite: '',
-            studentId: '5c994b207615a922f6b15e14',
+            studentId: '5c9ea2db5298ca1c52e48f48',
             country: 'US',
             //resume:''
 
@@ -40,7 +40,7 @@ class PersonalInfo extends Component {
                 zip: this.state.zip,
                 country: this.state.country,
                 personalWebsite: this.state.personalWebsite,
-                description: this.state.description
+                title: this.state.title
             })
             .then(response => {
             })
@@ -116,32 +116,32 @@ class PersonalInfo extends Component {
                 <form onSubmit={this.handleSubmit}>
                 <div className="form-group">
                 <label htmlFor="nameInput">Descriptive Introduction</label>
-                       <textarea id="desc" onChange={this.handleChange} name="description" value={this.state.description} className="form-control">
+                       <textarea id="desc" onChange={this.handleChange} name="title" value={this.state.title} className="form-control">
                        </textarea>
                 </div>
                     <div className="form-group">
                         <label htmlFor="nameInput">First Name</label>
-                        <input required type="text" onChange={this.handleChange} value={this.state.firstName} className="form-control" id="fName" name="firstName" placeholder="Enter First Name" />
+                        <input  type="text" onChange={this.handleChange} value={this.state.firstName} className="form-control" id="fName" name="firstName" placeholder="Enter First Name" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="lastName">Last Name</label>
-                        <input required type="text" onChange={this.handleChange} value={this.state.lastName} className="form-control" name="lastName" id="lName" placeholder="Enter Last Name" />
+                        <input  type="text" onChange={this.handleChange} value={this.state.lastName} className="form-control" name="lastName" id="lName" placeholder="Enter Last Name" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="email">Email Address</label>
-                        <input required type="email" onChange={this.handleChange} value={this.state.email} className="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter Email" />
+                        <input  type="email" onChange={this.handleChange} value={this.state.email} className="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter Email" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="phone">Phone Number</label>
-                        <input required type="text" onChange={this.handleChange} value={this.state.phone} className="form-control" name="phone" id="phone" aria-describedby="phone number" placeholder="Enter Phone Number" />
+                        <input  type="text" onChange={this.handleChange} value={this.state.phone} className="form-control" name="phone" id="phone" aria-describedby="phone number" placeholder="Enter Phone Number" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="Address">Street Address</label>
-                        <input required type="text" onChange={this.handleChange} value={this.state.address} className="form-control" name="address" id="address" placeholder="Enter Street Address" />
+                        <input  type="text" onChange={this.handleChange} value={this.state.address} className="form-control" name="address" id="address" placeholder="Enter Street Address" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="Address">City</label>
-                        <input required type="text" onChange={this.handleChange} value={this.state.city} className="form-control" name="city" id="city" placeholder="Enter Street Address" />
+                        <input  type="text" onChange={this.handleChange} value={this.state.city} className="form-control" name="city" id="city" placeholder="Enter Street Address" />
                     </div>
                     <div className="form-group">
                         <label htmlFor="Enter Zip Code ">Zip Code</label>
@@ -152,7 +152,7 @@ class PersonalInfo extends Component {
                     </div>
                     <div className="form-group">
                         <label htmlFor="Personal Website">Personal Website</label>
-                        <input required type="text" onChange={this.handleChange} value={this.state.personalWebsite} className="form-control" name="personalWebsite" id="personalWebsite" placeholder="github or personal website URL" />
+                        <input  type="text" onChange={this.handleChange} value={this.state.personalWebsite} className="form-control" name="personalWebsite" id="personalWebsite" placeholder="github or personal website URL" />
                     </div>
 
                     <button type="submit" value="Submit" className="btn btn-primary">Submit</button>

@@ -44,7 +44,7 @@ export default class JobSeekers extends Component {
     render() {
         return (
             <div>
-                    <Table  bordered hover>
+                    <Table   hover>
                         <thead>
                             <tr>
                                 <th>Image</th>
