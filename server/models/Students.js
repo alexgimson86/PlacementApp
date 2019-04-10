@@ -85,8 +85,6 @@ var StudentSchema = new Schema(
   
 );
 
-StudentSchema.methods.validPassword = function(p){
-  return p === this.password
-}
+
 
 module.exports = StudentSchema;

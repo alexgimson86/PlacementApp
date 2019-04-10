@@ -26,8 +26,9 @@ export default class JobSeekers extends Component {
         return <StudentComponent key={student._id} studentInfo={student} />
     }
     componentDidMount() {
-
-        axios.get('http://localhost:4000/student')
+        axios.get('http://localhost:4000/student',
+            {withCredentials: true }
+        )
             .then(results => {
 
                 let l = results.data.map((student) => {

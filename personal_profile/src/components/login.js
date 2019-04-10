@@ -6,7 +6,6 @@ import {
     Redirect,
     Route,
 } from "react-router-dom";
-import JobSeekers from './jobSeekers';
 
 
 class Login extends Component {
@@ -26,17 +25,18 @@ class Login extends Component {
     handleClick = (e) => {
         e.preventDefault();
         axios({
-            method: 'post',
+            method:'post',
             url: 'http://localhost:4000/student/login',
             data: {
                 password: this.state.password,
                 username: this.state.username,
             }
-        })
-            .then(response => {
+        }).then(response => {
+            document.cookie = `id=${response.data._id} path=/jobseekers/${response.data.username}`
                 if(response.status === 200){
+                    var link = `/jobseekers/${response.data.username}`
                     this.setState({
-                        redirect: "/jobseekers",
+                        redirect: link,
                         userInfo: response.data
                     })
             }
