@@ -635,9 +635,11 @@ app.put('/student/login/:id', (req, res) => { });
 
 app.delete('/student/login/:id', (req, res) => { });
 app.get('/logout', (req, res) => {
-  res.status(200).send();
+  req.logout();
+    res.status(200).send();
+  
 })
-app.get('/student',
+app.get('/student', isAuthenticated,
 (req, res) => {
   console.log(req.user);
     Student.find((err, students) => {

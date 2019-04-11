@@ -43,6 +43,7 @@ class Login extends Component {
             }
             })
             .catch(err => {
+                alert("error bad login data")
                 console.log(err)
             });
     }
