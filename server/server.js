@@ -1,19 +1,18 @@
 const read = require('fs');
 const express = require('express');
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  credentials: true,
-
-}
 const session = require('express-session');
-//const session = require('cookie-session');
+var corsOptions = {
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus : 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true
+}
+const MongoStore = require('connect-mongo')(session);
 const bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
+//var cookieParser = require('cookie-parser');
 const path = require('path');
 var cors = require('cors');
 //const morgan = require('morgan');
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
+
 var multer = require('multer');
 const uuidv4 = require('uuid/v4'); 
 const mongoose = require('mongoose');
@@ -24,6 +23,7 @@ const StudentSchema = require('./models/Students');
 const InstructorSchema = require('./models/Instructors');
 const ResumeSchema = require('./models/Resumes');
 const UserSchema = require('./models/Users')
+
 
 
 const ObjectID = require('mongodb').ObjectID;
@@ -55,36 +55,6 @@ const Resume = mongoose.model('Resume', ResumeSchema);
 const User = mongoose.model('User', UserSchema);
 
 
-
-passport.use(new LocalStrategy(
-  function(username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
-  }
-)); 
-
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
-//end of passport serialize funcs
-
-//passport js strategy for username and password login i.e. not using social media
-
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     /*
@@ -107,26 +77,42 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage })
+var passport = require('passport')
 
 // create the multer instance that will be used to upload/save the file
 //const upload = multer({ storage });
 
-app.use(require('morgan')('combined'));
+//app.use(require('morgan'));
 app.use(cors(corsOptions));
-app.use(bodyParser.urlencoded({ extended: true }));
+//app.use(cookieParser('keyboard cat'));
+app.use(session({ 
+  secret: 'keyboard cat', 
+  resave: false, 
+  saveUninitialized: false,
+  store: new MongoStore({url: url}),
+  cookie: { secure: false }
+}));
+
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public/uploads')))
-app.use(cookieParser());
-app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
-
-
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+var local = require('./passport/login')
+var initPassport = require('./passport/init');
+initPassport(passport);
 //const ObjectId = mongoose.Types.ObjectId;
 
-
+var isAuthenticated = function (req, res, next) {
+	// if user is authenticated in the session, call the next() to call the next request handler 
+	// Passport adds this method to request object. A middleware is allowed to add properties to
+	// request and response objects
+	if (req.isAuthenticated())
+		return next();
+	// if the user is not authenticated then redirect him to the login page
+	res.redirect('/');
+}
 
 
 // Singular, not pularlized models declared here for Referencing in other schemas
@@ -151,13 +137,17 @@ app.post('/student/signup', (req, res) => {
 });
 //login with local strategy
 app.post('/student/login', 
-  passport.authenticate('local'),
-  function(req, res){
+  passport.authenticate('local', { failureRedirect: '/loginFailed' }),
+  function(req, res) {
+    req.session.user = req.user
+    req.session.sessionID = req.sessionID;
     res.send(req.user);
-  }
-);
+  });
 // ****** Get all students from Postman *******
 
+app.get('/loginFailed', (req, res)=>{
+  res.status(404).send()
+})
 
 
 // get the student with that id (accessed at GET http://localhost:3001/student/:student_id)
@@ -644,9 +634,12 @@ app.get('/student/login/:id', (req, res) => { });
 app.put('/student/login/:id', (req, res) => { });
 
 app.delete('/student/login/:id', (req, res) => { });
-
-app.get('/student', (req, res, next) => {
-  console.log(req.isAuthenticated() + ' ' + req.user)
+app.get('/logout', (req, res) => {
+  res.status(200).send();
+})
+app.get('/student',
+(req, res) => {
+  console.log(req.user);
     Student.find((err, students) => {
       if (err)
           res.send(err);
@@ -661,10 +654,5 @@ app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });
 
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) 
-   return next(); 
-  else
-  return res.send(401);
- // res.redirect('http://localhost:3000');
-}
+
+module.exports = app

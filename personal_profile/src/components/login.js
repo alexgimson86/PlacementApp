@@ -30,9 +30,10 @@ class Login extends Component {
             data: {
                 password: this.state.password,
                 username: this.state.username,
-            }
+            }, 
+            withCredentials: true,
         }).then(response => {
-            document.cookie = `id=${response.data._id} path=/jobseekers/${response.data.username}`
+            //document.cookie = `id=${response.data._id} path=/jobseekers/${response.data.username}`
                 if(response.status === 200){
                     var link = `/jobseekers/${response.data.username}`
                     this.setState({
@@ -57,7 +58,7 @@ class Login extends Component {
                         <Form>
                             <Form.Group controlId="formBasicEmail">
                                 <Form.Label>Username</Form.Label>
-                                <Form.Control type="username" name="username" onChange={this.handleChange} value={this.state.username} placeholder="Enter username" />
+                                <Form.Control type="text" name="username" onChange={this.handleChange} value={this.state.username} placeholder="Enter username" />
                             </Form.Group>
                             <Form.Group controlId="formBasicPassword">
                                 <Form.Label>Password</Form.Label>
