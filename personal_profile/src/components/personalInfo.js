@@ -29,6 +29,7 @@ class PersonalInfo extends Component {
         this.setState({[event.target.name] : event.target.value });
     }
     handleSubmit = (event) => {
+        event.preventDefault();
         axios.put('http://localhost:4000/student/'+this.props.match.params.username,
             {
                 firstName: this.state.firstName,
@@ -159,7 +160,7 @@ class PersonalInfo extends Component {
                 </form>
                 <br/>
                 <br/>
-                    <Resume studentId={this.props.match.params.username} />
+                    <Resume username={this.props.match.params.username} />
             </div>
         );
     }

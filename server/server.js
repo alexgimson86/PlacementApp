@@ -233,9 +233,9 @@ app.post('/resume/post/:username', upload.any(), (req, res) => {
   resume.save((err) => {
     if (err) 
       return handleError(err);
-    Resume.find({ pdfFileUrl: { $eq: req.files[0].filename } }, (err, resume) => {
+    Resume.findOne({ pdfFileUrl: { $eq: req.files[0].filename } }, (err, resume) => {
       if (!err) {
-        resumeId = resume[0].id;
+        resumeId = resume.id;
         Student.findOne( {"username" : req.params.username } , (err, student) => {
           student.resumes = ObjectID(resumeId)
           student.save((err) => {
