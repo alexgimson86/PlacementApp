@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Container, Jumbotron } from 'react-bootstrap'
+import { Form, Button, Container, Jumbotron, Row, Col, Nav} from 'react-bootstrap'
 import axios from 'axios'
 import {
     BrowserRouter as Router,
@@ -69,7 +69,11 @@ class Login extends Component {
         else {
             return (
                 <Container>
-                    <Button onClick={this.goToSignup}>Sign Up</Button>
+                <Row>
+                    <Nav.Link className="justify-content-start" onClick={this.handleLogout}>
+                        LOG OUT
+                    </Nav.Link>
+                </Row>
                     <br /> <br />
                     <Jumbotron>LOGIN PAGE</Jumbotron>
                     <Container>
