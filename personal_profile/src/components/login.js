@@ -70,8 +70,8 @@ class Login extends Component {
             return (
                 <Container>
                 <Row>
-                    <Nav.Link className="justify-content-start" onClick={this.handleLogout}>
-                        LOG OUT
+                    <Nav.Link className="justify-content-start" onClick={this.goToSignup}>
+                        SIGN UP
                     </Nav.Link>
                 </Row>
                     <br /> <br />
