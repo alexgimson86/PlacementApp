@@ -15,6 +15,7 @@ class Login extends Component {
             username: '',
             password: '',
             redirect: null,
+            loginRedirect: null,
         }
     }
     handleChange = (event) => {
@@ -30,6 +31,7 @@ class Login extends Component {
             data: {
                 password: this.state.password,
                 username: this.state.username,
+
             }, 
             withCredentials: true,
         }).then(response => {
@@ -40,6 +42,8 @@ class Login extends Component {
                         redirect: link,
                         userInfo: response.data
                     })
+                    //sessionStorage.setItem("lastname", response.data.username);
+                    // Retrieve    
             }
             })
             .catch(err => {
@@ -47,13 +51,26 @@ class Login extends Component {
                 console.log(err)
             });
     }
+    goToSignup = () => {
+        var toLogin = null;
+        toLogin = "/signup"
+        this.setState(()=>{
+          return  {loginRedirect: "/signup" }
+        })
+        return <Redirect to={toLogin } />
+    }
     render() {
-        if (this.state.redirect) {
+        if(this.state.loginRedirect){
+            return <Redirect to={{ pathname: this.state.loginRedirect}} />
+        }
+        else if (this.state.redirect) {
             return <Redirect to={{ pathname: this.state.redirect}} />
         }
         else {
             return (
-                <Container><br /> <br />
+                <Container>
+                    <Button onClick={this.goToSignup}>Sign Up</Button>
+                    <br /> <br />
                     <Jumbotron>LOGIN PAGE</Jumbotron>
                     <Container>
                         <Form>

@@ -23,9 +23,9 @@ export default class Resume extends Component {
         let form = new FormData();
         form.append('myFile', this.state.resume)
         form.append('myPic', this.state.picture)
-        axios.post('http://localhost:4000/resume/post', form)
+        axios.post(`http://localhost:4000/resume/post/${this.props.username}`, form)
         .then((result)=>{
-           
+           alert("success")
         })
     }
     render() {

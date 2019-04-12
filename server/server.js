@@ -124,14 +124,23 @@ var isAuthenticated = function (req, res, next) {
 
 app.post('/student/signup', (req, res) => {
   console.log('in /student/signup, req.body sent is :\n', req.body)
-  var student = new Student(req.body);
-  console.log('student created is \n', student);
+  //var student = new Student(req.body);
+  var user = new User(req.body)
+  console.log('user created is \n', user);
+  var student = new Student({ username:req.body.username }) 
 
-  student.save(function (err, r) {
+  user.save(function (err, r) {
     if (err) {
       res.send(err)
     }
-    res.json(student)
+    else{
+      student.save(function(err,r){
+        if(err){
+          res.send(err)
+        }
+        res.json(student)
+      })
+    }
   })
 
 });
@@ -162,10 +171,10 @@ app.get('/student/:student_id', (req, res) => {
 // student update account form PUT ---------------------------------------------------
 // be sure to set values in Postman if testing with Postman under the Body tab below the url path bar
 
-app.put('/student/:student_id', (req, res) => {
-  //save user id for this session
-  req.session.student_id = req.params.student_id;
-  Student.findById(ObjectID(req.params.student_id)/*req.params.student_id*/, (err, student) => {
+app.put('/student/:student_username', (req, res) => {
+  //save user username for this session
+  //req.session.student_username = req.params.student_username;
+  Student.findOne( { "username" : req.params.student_username }, (err, student) => {
 
     // updating student info
     if (req.body.firstName) student.firstName = req.body.firstName;
@@ -206,10 +215,9 @@ app.get('/resume', (req, res) => {
 });
 
 // get individual resume
-
 app.get('/resume/:student_id', (req, res) => {
   Student.findById(req.params.student_id, (error, student) => {
-    Resume.findById(student.resumes[0] , (err, resume) => {
+    Resume.findById(student.resumes[0], (err, resume) => {
       if (err)
         res.send(err);
       res.send(resume.pdfFileUrl);
@@ -218,37 +226,34 @@ app.get('/resume/:student_id', (req, res) => {
   })
 });
 
-app.post('/resume/post', upload.any(), (req, res) => {
+app.post('/resume/post/:username', upload.any(), (req, res) => {
   var resumeId = null;
   console.log(req.files)
-  var id = '5c9ea2db5298ca1c52e48f48'
-  
-  var resume = new Resume({ title: req.files[0].filename, studentId: ObjectID(id), pdfFileUrl: req.files[0].filename, })
-  resume.save((function (err) {
-    if (err) return handleError(err);
-
+  var resume = new Resume({ title: req.files[0].filename, studentId: req.params.username, pdfFileUrl: req.files[0].filename, })
+  resume.save((err) => {
+    if (err) 
+      return handleError(err);
     Resume.find({ pdfFileUrl: { $eq: req.files[0].filename } }, (err, resume) => {
       if (!err) {
         resumeId = resume[0].id;
-        Student.findById(ObjectID(id), (err, student) => {
+        Student.findOne( {"username" : req.params.username } , (err, student) => {
           student.resumes = ObjectID(resumeId)
           student.save((err) => {
             console.log(err)
+            Student.findOne( {"username" : req.params.username } , (err, student) => {
+              student.imageUrl = req.files[1].filename
+              student.save((err) => {
+                if (err)
+                res.send(err);
+                res.send();
+              });
+            })
           })
         })
-      }
-    })
-    //save image url to student db
-  }));
-  Student.findById(ObjectID(id), (err, student) => {
-    student.imageUrl = req.files[1].filename
-    student.save((err) => {
-      if (err)
-        res.send(err);
-      res.send();
-    });
-  })
-});
+      //save image url to student db
+    }
+  });
+})})
 
 app.put('/resume/:resume_id', (req, res) => {
   console.log('in /resume/:resume_id, req.body sent is : ', req.body);

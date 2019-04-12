@@ -8,11 +8,11 @@ const UserSchema = new Schema({
   },
   recruiter: {
       type: Boolean,
-      required: true
+      required: false
   },
   student: {
       type: Boolean,
-      required:true
+      required:false
   },
   email: {
     type: String,

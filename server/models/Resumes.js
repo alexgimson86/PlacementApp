@@ -100,8 +100,8 @@ var ResumeSchema = new Schema(
     },
     // studentId will be modified to be based off of authentication eventually
     studentId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Student'
+      type: String
+      //ref: 'Student'
     },
     defaultFlag: {
       type: Boolean,
