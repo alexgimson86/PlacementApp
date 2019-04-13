@@ -67,7 +67,6 @@ const ModalFunc = (props) => {
                             Close
                             </Button>
                     </Link>
-                    <Route exact path="/" component={JobSeekers}/>
                     <Route exact path="/resumes/:id" render={()=>(<Resumes studentInfo={props.studentInfo}/>)}/>
 
                 </Router>

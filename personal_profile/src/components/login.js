@@ -42,7 +42,7 @@ class Login extends Component {
                         redirect: link,
                         userInfo: response.data
                     })
-                    //sessionStorage.setItem("lastname", response.data.username);
+                    sessionStorage.setItem("myCurrentUsername", response.data.username);
                     // Retrieve    
             }
             })
