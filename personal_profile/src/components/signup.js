@@ -27,7 +27,7 @@ class Signup extends Component {
     }
     handleClick = (e) => {
         e.preventDefault();
-        if(this.state.password === this.state.passwordConfirm){
+        if( this.state.password === this.state.passwordConfirm ){
         axios({
             method:'post',
             url: `http://localhost:4000/student/signup`,

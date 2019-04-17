@@ -50,6 +50,8 @@ export default class Resumes extends Component {
     }
     render() {
         const { pageNumber, numPages } = this.state;
+        if(this.state.fileUrl){
+        }
             return (
                 <div>
                     <Document

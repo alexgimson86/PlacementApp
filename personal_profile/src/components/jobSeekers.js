@@ -74,7 +74,7 @@ export default class JobSeekers extends Component {
             return <Redirect to={{ pathname: this.state.redirect }} />
         }
         else if(this.state.redirectToProfile){
-           return <Redirect to={{ pathname: this.state.redirectToProfile, state: { myInfo: this.state.myInfo.key} }}/>
+           return <Redirect to={{ pathname: this.state.redirectToProfile, state: { myId: this.state.myInfo.key} }}/>
         }
         else{
         return (

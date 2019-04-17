@@ -3,6 +3,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../styles/personalForm.css'
 import axios from 'axios';
 import Resume from './resumeUpload';
+import {
+    BrowserRouter as Router,
+    Redirect,
+    Route,
+} from "react-router-dom";
 
 class PersonalInfo extends Component {
     constructor(props) {
@@ -20,6 +25,7 @@ class PersonalInfo extends Component {
             personalWebsite: '',
             studentId: '5c9ea2db5298ca1c52e48f48',
             country: 'US',
+            listPage: null,
             //resume:''
 
 
@@ -48,6 +54,12 @@ class PersonalInfo extends Component {
             .catch(err => {
                 console.log(err)
             });
+    }
+    returnToList =() =>{
+        this.setState({
+            listPage: `/jobseekers/${this.props.match.params.username}`
+        })
+
     }
     stateDropdown = () => {
         let state =
@@ -107,6 +119,9 @@ class PersonalInfo extends Component {
         return state;
     }
     render() {
+        if(this.state.listPage){
+           return  <Redirect to={this.state.listPage} />
+        }
         return (
             <div className="container">
                 <div className="jumbotron">
@@ -161,6 +176,9 @@ class PersonalInfo extends Component {
                 <br/>
                 <br/>
                     <Resume username={this.props.match.params.username} />
+                    <br/>
+                    <hr/>
+                    <button onClick={this.returnToList}>Done</button>
             </div>
         );
     }
